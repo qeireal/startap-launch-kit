@@ -1,6 +1,10 @@
+<div align="center">
+
+![StarTap Launch Kit](assets/readme-logo.png)
+
 # StarTap Launch Kit
 
-![StarTap Launch Kit](logo.png)
+</div>
 
 Three skills that help a coding agent get a website ready to launch. They work on the code in your repository, so the agent can fix problems instead of only reporting them. They're built from the free tools at [startap.cc/tools](https://startap.cc/tools).
 
@@ -16,11 +20,58 @@ Ask in plain words, for example "audit my site before launch", "where should I s
 
 ## Install
 
-In Claude Code:
+The skills follow the open [Agent Skills](https://agentskills.io) format, so they work in any agent that reads `SKILL.md` files.
+
+### Claude Code
+
+Run these inside Claude Code:
 
 ```
 /plugin marketplace add qeireal/startap-launch-kit
 /plugin install startap-launch-kit@startap
+```
+
+### Codex
+
+Run these in your terminal, then restart Codex:
+
+```bash
+codex plugin marketplace add qeireal/startap-launch-kit
+codex plugin add startap-launch-kit@startap
+```
+
+Update later with `codex plugin marketplace upgrade`.
+
+### OpenCode
+
+OpenCode loads skills from `~/.config/opencode/skills/` for every project, or `.opencode/skills/` for one project. Copy the three skill folders there:
+
+```bash
+git clone --depth 1 https://github.com/qeireal/startap-launch-kit.git /tmp/startap-launch-kit
+mkdir -p ~/.config/opencode/skills
+cp -R /tmp/startap-launch-kit/skills/* ~/.config/opencode/skills/
+```
+
+Restart OpenCode. To update, run the same commands again.
+
+### Pi
+
+Install it as a Pi package straight from GitHub:
+
+```bash
+pi install git:github.com/qeireal/startap-launch-kit
+```
+
+Pi finds the skills through the `pi` field in `package.json`. Update with `pi update`.
+
+### Any other agent
+
+Most agents that support skills also read `~/.agents/skills/`. Copy the skill folders there:
+
+```bash
+git clone --depth 1 https://github.com/qeireal/startap-launch-kit.git /tmp/startap-launch-kit
+mkdir -p ~/.agents/skills
+cp -R /tmp/startap-launch-kit/skills/* ~/.agents/skills/
 ```
 
 ## What it runs, reads and sends
