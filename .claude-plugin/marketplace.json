@@ -1,0 +1,15 @@
+{
+  "name": "startap",
+  "description": "Launch tools from StarTap for coding agents.",
+  "owner": {
+    "name": "StarTap",
+    "url": "https://startap.cc"
+  },
+  "plugins": [
+    {
+      "name": "startap-launch-kit",
+      "source": "./",
+      "description": "Audit and fix a site's launch SEO in the code, plan free startup directory submissions, and keep a dated launch checklist."
+    }
+  ]
+}
