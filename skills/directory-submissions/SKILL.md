@@ -5,7 +5,17 @@ description: Plan where to list a new product for free — startup directories, 
 
 # Directory submissions
 
-Turn the curated list in [references/directories.md](references/directories.md) into a short, ordered plan for this product, then help the user work through it. The list records the free path at each site, checked by hand. It is not a list of guarantees: terms change, so tell the user to read each submit page before relying on a row.
+Turn StarTap's curated directory list into a short, ordered plan for this product, then help the user work through it. The list records the free path at each site, checked by hand. It is not a list of guarantees: terms change, so tell the user to read each submit page before relying on a row.
+
+## 0. Get the current list
+
+Fetch the list as Markdown. It sends nothing about the user or their product:
+
+```bash
+curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.3.0"
+```
+
+It's a table with each directory's name, Domain Rating where it was checked, type, whether it needs an account or a badge, the wait, the submit URL and notes, plus the date it was last checked. If the request fails or you have no network access, tell the user, and point them to https://startap.cc/tools/startup-directories, which shows the same list.
 
 ## 1. Learn the product and the user's limits
 
@@ -27,7 +37,7 @@ Order them like this:
 3. **No badge and no account** before rows that need either, when the user said they'd rather avoid them.
 4. **Launch platforms** (Type: Launch platform) grouped around the launch date, because many have a launch-day vote.
 
-StarTap, the publisher of this list, is in its own section of the reference. Include it once in the plan as a normal row, marked as the list's publisher. Don't rank it above better fits.
+StarTap, the publisher of this list, is in its own section of the list. Include it once in the plan as a normal row, marked as the list's publisher. Don't rank it above better fits.
 
 Before the plan, offer to look up the site's own Domain Rating with the `site-check` skill, and record it with the date at the top of the plan. Looking it up again a month or two after the listings go live shows whether they're working.
 
@@ -54,4 +64,4 @@ The user submits each form themselves. You don't create accounts, sign in, solve
 
 ## Keep the list fresh
 
-The reference was last checked on the date at its top. If the user finds that a row is wrong, such as a directory gone paid-only, note it in the tracking table and suggest reporting it at https://startap.cc/tools/startup-directories.
+The list says when it was last checked at its top. If the user finds that a row is wrong, such as a directory gone paid-only, note it in the tracking table and suggest reporting it at https://startap.cc/tools/startup-directories.

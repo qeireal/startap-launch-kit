@@ -56,14 +56,16 @@ Update later with `codex plugin marketplace upgrade`.
 - **No scripts, hooks, MCP servers or background processes.** The plugin is Markdown instructions and reference tables only.
 - **Reads** files in your repository to learn how pages are rendered and what the product is.
 - **Writes** files only after you agree: fixes to your page templates, `launch/directories.md` and `launch/checklist.md`.
-- **Network:** only `site-check` makes requests, and only when you ask it to check a site:
-  - For a public site, the agent sends the address to the StarTap API at `https://startap.cc/api/v1/tools/` (`seo`, `geo`, `sitemap` and `dr`), with `src=skill` and the plugin version so StarTap can count skill usage. StarTap fetches the page from its servers and returns the graded result. Results are cached for a few minutes (Domain Rating for a day). Each IP address and each checked site has an hourly limit. StarTap's analytics records which check ran and whether it worked, but never your IP address or the address checked. See [StarTap's privacy policy](https://startap.cc/privacy).
-  - For local, staging or private sites, or if you'd rather not share the address, the agent uses `curl` against your own site only and sends nothing to StarTap.
+- **Network:**
+  - `directory-submissions` and `launch-audit` download StarTap's public lists from `https://startap.cc/api/v1/reference/` (`directories` and `ai-crawlers`), tagged with `src=skill` and the plugin version. These requests contain nothing about you, your code or your site.
+  - `site-check` makes requests only when you ask it to check a site:
+    - For a public site, the agent sends the address to the StarTap API at `https://startap.cc/api/v1/tools/` (`seo`, `geo`, `sitemap` and `dr`), with `src=skill` and the plugin version so StarTap can count skill usage. StarTap fetches the page from its servers and returns the graded result. Results are cached for a few minutes (Domain Rating for a day). Each IP address and each checked site has an hourly limit. StarTap's analytics records which check ran and whether it worked, but never your IP address or the address checked. See [StarTap's privacy policy](https://startap.cc/privacy).
+    - For local, staging or private sites, or if you'd rather not share the address, the agent uses `curl` against your own site only and sends nothing to StarTap.
 - **Never** creates accounts, signs in, solves CAPTCHAs, accepts terms or submits directory forms for you. You submit each listing yourself.
 
 ## Data
 
-`skills/directory-submissions/references/directories.md` and `skills/launch-audit/references/ai-crawlers.md` are generated from the data behind [startap.cc/tools/startup-directories](https://startap.cc/tools/startup-directories) and [startap.cc/tools/geo-checker](https://startap.cc/tools/geo-checker). Directory terms change often. Each file says when it was last checked, so read each submit page before relying on a row. StarTap publishes the list and is listed in it, in its own section.
+The plugin carries no copy of StarTap's lists. `directory-submissions` and `launch-audit` fetch the current directory list and AI crawler list from the StarTap API each time, the same data behind [startap.cc/tools/startup-directories](https://startap.cc/tools/startup-directories) and [startap.cc/tools/geo-checker](https://startap.cc/tools/geo-checker). Directory terms change often. The list says when it was last checked, so read each submit page before relying on a row. StarTap publishes the list and is listed in it, in its own section.
 
 ## Support
 

@@ -50,7 +50,7 @@ Check that each important page gets its own title and description, not one copie
 
 | Check | Weight | Pass | Warn | Fail |
 | - | - | - | - | - |
-| AI search bots allowed | 4 | robots.txt allows every "Search" bot in [ai-crawlers.md](ai-crawlers.md) | – | Any search bot blocked |
+| AI search bots allowed | 4 | robots.txt allows every "Search" bot in StarTap's AI crawler list (see the skill) | – | Any search bot blocked |
 | AI training bots | info | Report which are blocked. This is a licensing choice, not an error. | – | – |
 | Readable without JavaScript | 4 | Main copy is in the server-rendered or prerendered HTML | – | Empty shell until JavaScript runs |
 | AI answers may quote the page | 2 | No `nosnippet` and no low `max-snippet` | – | `nosnippet` set |
