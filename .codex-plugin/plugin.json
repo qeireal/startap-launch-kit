@@ -1,6 +1,6 @@
 {
   "name": "startap-launch-kit",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Get a website ready to launch: audit and fix its SEO, social previews and AI-search access in the code, check the live site and its Domain Rating, search and plan free startup directory submissions, and keep a dated launch checklist.",
   "author": {
     "name": "StarTap",
@@ -26,7 +26,7 @@
     "shortDescription": "Launch SEO and directory plans",
     "longDescription": "Four skills for getting a website ready to launch. launch-audit checks page templates for titles, meta descriptions, Open Graph, JSON-LD, robots.txt, sitemaps and AI-crawler access, then fixes what's missing. site-check grades a live site's SEO, AI-search readiness and sitemap through the StarTap API, with a curl fallback for local and private sites. directory-submissions builds a submission plan from StarTap's curated list of startup directories and writes ready-to-paste listing copy. launch-checklist writes a dated launch plan into the repo and ticks off what the code already proves is done. It also connects StarTap's read-only MCP server, whose find_directories tool searches that directory list by type, account, badge, Domain Rating and keywords. site-check sends the address being checked to startap.cc; everything else only reads StarTap's public data.",
     "developerName": "Kirill Galushko",
-    "category": "Developer tools",
+    "category": "Developer Tools",
     "capabilities": [
       "Read",
       "Write"

@@ -15,7 +15,7 @@ The list lives on startap.cc, so it's always current. Read it one of two ways, b
 - **Otherwise**, fetch the same list over HTTP, with the same filters as query parameters:
 
   ```bash
-  curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.4.1"
+  curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.4.2"
   ```
 
 Both return the same rows: each directory's name, Domain Rating by Ahrefs where it was checked, type, whether it needs an account or a badge, the wait, the submit URL and notes, plus the date the list was last checked. Credit any rating you show as "Domain Rating by Ahrefs".

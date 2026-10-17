@@ -63,7 +63,9 @@ need(ui.displayName && ui.displayName.length <= 30, "interface.displayName: requ
 need(ui.shortDescription && ui.shortDescription.length <= 30, "metadata.openai.shortDescription: required, at most 30 characters");
 need(ui.longDescription.length <= 4000, "metadata.openai.longDescription: at most 4000 characters");
 need(ui.developerName && ui.developerName.length <= 80, "metadata.openai.developerName: required, at most 80 characters");
-need(ui.category, "metadata.openai.category: required");
+// From https://developers.openai.com/plugins/deploy/submission-errors (plugin_category_unknown). Exact spelling and case.
+const CATEGORIES = ["Productivity", "Creativity", "Developer Tools", "Business & Operations", "Data & Analytics", "Communication", "Education & Research", "Security", "Finance", "Healthcare", "Travel", "Entertainment", "Other"];
+need(CATEGORIES.includes(ui.category), `metadata.openai.category: one of ${CATEGORIES.join(", ")}`);
 need(ui.capabilities.length <= 20 && ui.capabilities.every((c) => c.length <= 120), "metadata.openai.capabilities: at most 20, each at most 120 characters");
 for (const key of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
   need(!ui[key] || (/^https:\/\//.test(ui[key]) && ui[key].length <= 1024), `interface.${key}: an https:// URL, at most 1024 characters`);
