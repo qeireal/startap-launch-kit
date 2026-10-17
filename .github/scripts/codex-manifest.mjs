@@ -1,8 +1,8 @@
 // Builds .codex-plugin/plugin.json, the manifest OpenAI's plugin directory and Codex read, from
 // .claude-plugin/plugin.json, so the plugin has one manifest to edit. Shared fields are copied;
 // the listing fields only OpenAI uses live under "metadata.openai", which Claude Code ignores.
-// The MCP servers in .mcp.json (Claude's format) become .codex-plugin/mcp.json in the Agent
-// Plugins format OpenAI and Codex read, so both point at the same servers.
+// The MCP servers in .mcp.json (Claude's format) become .codex-plugin/mcp.json in the format
+// OpenAI and Codex read, so both point at the same servers.
 //
 //   node .github/scripts/codex-manifest.mjs           write the file
 //   node .github/scripts/codex-manifest.mjs --check   fail if it's missing or out of date
@@ -19,7 +19,8 @@ const TYPES = { http: "streamable-http", sse: "sse" };
 const servers = Object.fromEntries(
   Object.entries(claudeMcp).map(([name, s]) => [name, { type: TYPES[s.type] ?? s.type, url: s.url, ...(s.headers ? { headers: s.headers } : {}) }]),
 );
-const codexMcp = Object.keys(servers).length ? { $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json", mcpServers: servers } : null;
+// No "$schema" key: OpenAI's portal rejects it in the Codex layout ("Extra inputs are not permitted").
+const codexMcp = Object.keys(servers).length ? { mcpServers: servers } : null;
 
 const manifest = {
   name: claude.name,

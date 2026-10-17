@@ -16,14 +16,14 @@ Use the URL the user gave. If they gave none, look in the repository for the pro
 
 ## 2. Run the checks through the StarTap API
 
-Each call sends the address to startap.cc, which fetches the page from its own servers and returns graded JSON. Make one request per check with `curl -s`, and always keep `src=skill&v=0.4.0` in the query:
+Each call sends the address to startap.cc, which fetches the page from its own servers and returns graded JSON. Make one request per check with `curl -s`, and always keep `src=skill&v=0.4.1` in the query:
 
 | Check | Request |
 | - | - |
-| SEO | `https://startap.cc/api/v1/tools/seo?url=<URL>&src=skill&v=0.4.0` |
-| AI search (GEO) | `https://startap.cc/api/v1/tools/geo?url=<URL>&src=skill&v=0.4.0` |
-| robots.txt and sitemap | `https://startap.cc/api/v1/tools/sitemap?url=<URL>&src=skill&v=0.4.0` |
-| Domain Rating | `https://startap.cc/api/v1/tools/dr?domain=<DOMAIN>&src=skill&v=0.4.0` |
+| SEO | `https://startap.cc/api/v1/tools/seo?url=<URL>&src=skill&v=0.4.1` |
+| AI search (GEO) | `https://startap.cc/api/v1/tools/geo?url=<URL>&src=skill&v=0.4.1` |
+| robots.txt and sitemap | `https://startap.cc/api/v1/tools/sitemap?url=<URL>&src=skill&v=0.4.1` |
+| Domain Rating | `https://startap.cc/api/v1/tools/dr?domain=<DOMAIN>&src=skill&v=0.4.1` |
 
 URL-encode the address. Run the checks the user asked for; for "check my site", run SEO, GEO and sitemap, and DR only if they ask about authority, backlinks or DR.
 
