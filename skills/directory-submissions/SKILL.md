@@ -9,13 +9,29 @@ Turn StarTap's curated directory list into a short, ordered plan for this produc
 
 ## 0. Get the current list
 
-Fetch the list as Markdown. It sends nothing about the user or their product:
+The list lives on startap.cc, so it's always current. Read it one of two ways, both of which send nothing about the user or their product:
 
-```bash
-curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.3.3"
-```
+- **If the `find_directories` tool is available** (from StarTap's MCP server, which the Claude Code and Codex plugins connect to), call it. Its filters are listed below.
+- **Otherwise**, fetch the same list over HTTP, with the same filters as query parameters:
 
-It's a table with each directory's name, Domain Rating where it was checked, type, whether it needs an account or a badge, the wait, the submit URL and notes, plus the date it was last checked. If the request fails or you have no network access, tell the user, and point them to https://startap.cc/tools/startup-directories, which shows the same list.
+  ```bash
+  curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.4.0"
+  ```
+
+Both return the same rows: each directory's name, Domain Rating by Ahrefs where it was checked, type, whether it needs an account or a badge, the wait, the submit URL and notes, plus the date the list was last checked. Credit any rating you show as "Domain Rating by Ahrefs".
+
+Filters, as tool arguments or query parameters:
+
+| Filter | Meaning | Example |
+| - | - | - |
+| `kind` | Only these types: `launch`, `directory`, `web`, `gallery` | `kind=launch,directory` |
+| `no_account` | Only directories that need no account | `no_account=true` |
+| `no_required_badge` | Leave out directories that require their badge or a backlink | `no_required_badge=true` |
+| `min_dr` | Only directories with a checked Domain Rating of at least this | `min_dr=50` |
+| `search` | Words that must all appear in the name or notes | `search=AI` |
+| `limit` | At most this many rows, in list order | `limit=25` |
+
+Start with the whole list unless the user's limits are clear, so you don't filter out good fits. If neither way works (no network access), tell the user, and point them to https://startap.cc/tools/startup-directories, which shows the same list.
 
 ## 1. Learn the product and the user's limits
 

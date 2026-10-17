@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "startap": {
+      "type": "http",
+      "url": "https://startap.cc/mcp"
+    }
+  }
+}

@@ -1,6 +1,8 @@
 // Builds .codex-plugin/plugin.json, the manifest OpenAI's plugin directory and Codex read, from
 // .claude-plugin/plugin.json, so the plugin has one manifest to edit. Shared fields are copied;
 // the listing fields only OpenAI uses live under "metadata.openai", which Claude Code ignores.
+// The MCP servers in .mcp.json (Claude's format) become .codex-plugin/mcp.json in the Agent
+// Plugins format OpenAI and Codex read, so both point at the same servers.
 //
 //   node .github/scripts/codex-manifest.mjs           write the file
 //   node .github/scripts/codex-manifest.mjs --check   fail if it's missing or out of date
@@ -12,6 +14,12 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const claude = JSON.parse(readFileSync(join(root, ".claude-plugin/plugin.json"), "utf8"));
 const openai = claude.metadata?.openai ?? {};
+const claudeMcp = existsSync(join(root, ".mcp.json")) ? JSON.parse(readFileSync(join(root, ".mcp.json"), "utf8")).mcpServers ?? {} : {};
+const TYPES = { http: "streamable-http", sse: "sse" };
+const servers = Object.fromEntries(
+  Object.entries(claudeMcp).map(([name, s]) => [name, { type: TYPES[s.type] ?? s.type, url: s.url, ...(s.headers ? { headers: s.headers } : {}) }]),
+);
+const codexMcp = Object.keys(servers).length ? { $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json", mcpServers: servers } : null;
 
 const manifest = {
   name: claude.name,
@@ -23,6 +31,7 @@ const manifest = {
   license: claude.license,
   keywords: claude.keywords,
   skills: "./skills/",
+  ...(codexMcp ? { mcpServers: "./.codex-plugin/mcp.json" } : {}),
   interface: {
     displayName: claude.displayName ?? claude.name,
     shortDescription: openai.shortDescription,
@@ -64,6 +73,11 @@ for (const key of ["logo", "composerIcon"]) {
   need(ui[key]?.startsWith("./") && existsSync(join(root, ui[key])), `interface.${key}: a ./ path to a file in the plugin (from "icon")`);
 }
 
+for (const [name, s] of Object.entries(servers)) {
+  need(Object.values(TYPES).includes(s.type) && /^https:\/\//.test(s.url ?? ""), `.mcp.json server "${name}": a remote http or sse server with an https:// url (local servers can't be submitted)`);
+  need(!s.headers, `.mcp.json server "${name}": no headers (OpenAI rejects them in public submissions)`);
+}
+
 if (problems.length) {
   console.error(`Can't build .codex-plugin/plugin.json:\n- ${problems.join("\n- ")}`);
   process.exit(1);
@@ -74,16 +88,17 @@ if (process.argv.includes("--dry-run")) {
   process.exit(0);
 }
 
-const out = join(root, ".codex-plugin/plugin.json");
-const text = `${JSON.stringify(manifest, null, 2)}\n`;
+const files = [[join(root, ".codex-plugin/plugin.json"), `${JSON.stringify(manifest, null, 2)}\n`]];
+if (codexMcp) files.push([join(root, ".codex-plugin/mcp.json"), `${JSON.stringify(codexMcp, null, 2)}\n`]);
 if (process.argv.includes("--check")) {
-  if (!existsSync(out) || readFileSync(out, "utf8") !== text) {
-    console.error(".codex-plugin/plugin.json is out of date. Run: node .github/scripts/codex-manifest.mjs");
+  const stale = files.filter(([path, text]) => !existsSync(path) || readFileSync(path, "utf8") !== text);
+  if (stale.length) {
+    console.error(".codex-plugin is out of date. Run: node .github/scripts/codex-manifest.mjs");
     process.exit(1);
   }
-  console.log(".codex-plugin/plugin.json is up to date.");
+  console.log(".codex-plugin is up to date.");
 } else {
-  mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, text);
-  console.log(`Wrote .codex-plugin/plugin.json for ${manifest.name} ${manifest.version}.`);
+  mkdirSync(join(root, ".codex-plugin"), { recursive: true });
+  for (const [path, text] of files) writeFileSync(path, text);
+  console.log(`Wrote .codex-plugin for ${manifest.name} ${manifest.version}${codexMcp ? ", with its MCP servers" : ""}.`);
 }

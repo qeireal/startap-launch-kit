@@ -1,6 +1,6 @@
-# Keeps .codex-plugin/plugin.json in step with .claude-plugin/plugin.json: on every push to main,
-# rebuild it and commit the result if it changed. Commits made with GITHUB_TOKEN don't start
-# another run, so this can't loop.
+# Keeps .codex-plugin/ (plugin.json and mcp.json) in step with .claude-plugin/plugin.json and
+# .mcp.json: on every push to main, rebuild it and commit the result if it changed. Commits made
+# with GITHUB_TOKEN don't start another run, so this can't loop.
 name: Codex manifest
 
 on:
@@ -23,16 +23,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Build .codex-plugin/plugin.json
+      - name: Build .codex-plugin
         run: node .github/scripts/codex-manifest.mjs
       - name: Commit if it changed
         run: |
-          if git diff --quiet --exit-code -- .codex-plugin; then
+          if [ -z "$(git status --porcelain -- .codex-plugin)" ]; then
             echo "Codex manifest already up to date."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add .codex-plugin/plugin.json
+          git add -A .codex-plugin
           git commit -m "Regenerate Codex manifest for $(node -p "require('./.claude-plugin/plugin.json').version")"
           git push

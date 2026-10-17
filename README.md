@@ -53,11 +53,12 @@ Update later with `codex plugin marketplace upgrade`.
 
 ## What it runs, reads and sends
 
-- **No scripts, hooks, MCP servers or background processes.** The plugin is Markdown instructions and reference tables only. The `.github/` folder holds this repository's release automation, which builds `.codex-plugin/plugin.json` for Codex from `.claude-plugin/plugin.json`. The plugin never runs it.
+- **No scripts, hooks or local processes.** The plugin is Markdown instructions, reference tables and one remote MCP server, StarTap's own at `https://startap.cc/mcp`. The `.github/` folder holds this repository's release automation, which builds `.codex-plugin/` for Codex and OpenAI from `.claude-plugin/plugin.json` and `.mcp.json`. The plugin never runs it.
 - **Reads** files in your repository to learn how pages are rendered and what the product is.
 - **Writes** files only after you agree: fixes to your page templates, `launch/directories.md` and `launch/checklist.md`.
 - **Network:**
-  - `directory-submissions` and `launch-audit` download StarTap's public lists from `https://startap.cc/api/v1/reference/` (`directories` and `ai-crawlers`), tagged with `src=skill` and the plugin version. These requests contain nothing about you, your code or your site.
+  - **MCP server:** in Claude Code and Codex, the plugin connects to StarTap's MCP server at `https://startap.cc/mcp`. It has one read-only tool, `find_directories`, which searches StarTap's directory list. Its only inputs are the filters you or the agent choose (type, account, badge, minimum Domain Rating, search words), and it sends nothing about you, your code or your site. No sign-in is needed.
+  - `directory-submissions` and `launch-audit` download StarTap's public lists from `https://startap.cc/api/v1/reference/` (`directories` and `ai-crawlers`) when the MCP tool isn't available, such as after `npx skills add`. These requests are tagged with `src=skill` and the plugin version, and contain nothing about you, your code or your site.
   - `site-check` makes requests only when you ask it to check a site:
     - For a public site, the agent sends the address to the StarTap API at `https://startap.cc/api/v1/tools/` (`seo`, `geo`, `sitemap` and `dr`), with `src=skill` and the plugin version so StarTap can count skill usage. StarTap fetches the page from its servers and returns the graded result. Results are cached for a few minutes (Domain Rating for a day). Each IP address and each checked site has an hourly limit. StarTap's analytics records which check ran and whether it worked, but never your IP address or the address checked. See [StarTap's privacy policy](https://startap.cc/privacy).
     - For local, staging or private sites, or if you'd rather not share the address, the agent uses `curl` against your own site only and sends nothing to StarTap.
