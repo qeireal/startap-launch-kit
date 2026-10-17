@@ -12,7 +12,7 @@ Turn StarTap's curated directory list into a short, ordered plan for this produc
 Fetch the list as Markdown. It sends nothing about the user or their product:
 
 ```bash
-curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.3.0"
+curl -s "https://startap.cc/api/v1/reference/directories?src=skill&v=0.3.1"
 ```
 
 It's a table with each directory's name, Domain Rating where it was checked, type, whether it needs an account or a badge, the wait, the submit URL and notes, plus the date it was last checked. If the request fails or you have no network access, tell the user, and point them to https://startap.cc/tools/startup-directories, which shows the same list.
