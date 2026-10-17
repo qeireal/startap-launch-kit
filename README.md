@@ -53,7 +53,7 @@ Update later with `codex plugin marketplace upgrade`.
 
 ## What it runs, reads and sends
 
-- **No scripts, hooks, MCP servers or background processes.** The plugin is Markdown instructions and reference tables only.
+- **No scripts, hooks, MCP servers or background processes.** The plugin is Markdown instructions and reference tables only. The `.github/` folder holds this repository's release automation, which builds `.codex-plugin/plugin.json` for Codex from `.claude-plugin/plugin.json`. The plugin never runs it.
 - **Reads** files in your repository to learn how pages are rendered and what the product is.
 - **Writes** files only after you agree: fixes to your page templates, `launch/directories.md` and `launch/checklist.md`.
 - **Network:**

@@ -22,7 +22,7 @@ If the main copy is rendered only in the browser (a single-page app with an empt
 Go through every check in [references/checks.md](references/checks.md) for the homepage and the 3–5 most important pages (pricing, the main landing pages, docs index). Where a value is computed, read the code that computes it. For robots.txt rules about AI bots, fetch StarTap's list of AI crawlers, which says which ones are search bots and which are training bots. It sends nothing about the user or their site:
 
 ```bash
-curl -s "https://startap.cc/api/v1/reference/ai-crawlers?src=skill&v=0.3.1"
+curl -s "https://startap.cc/api/v1/reference/ai-crawlers?src=skill&v=0.3.2"
 ```
 
 Without network access, check at least OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-SearchBot, Claude-User, Googlebot and Bingbot, and say the list couldn't be loaded.

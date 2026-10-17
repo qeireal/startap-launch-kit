@@ -1,0 +1,89 @@
+// Builds .codex-plugin/plugin.json, the manifest OpenAI's plugin directory and Codex read, from
+// .claude-plugin/plugin.json, so the plugin has one manifest to edit. Shared fields are copied;
+// the listing fields only OpenAI uses live under "metadata.openai", which Claude Code ignores.
+//
+//   node .github/scripts/codex-manifest.mjs           write the file
+//   node .github/scripts/codex-manifest.mjs --check   fail if it's missing or out of date
+//   node .github/scripts/codex-manifest.mjs --dry-run only check the fields against OpenAI's limits
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const claude = JSON.parse(readFileSync(join(root, ".claude-plugin/plugin.json"), "utf8"));
+const openai = claude.metadata?.openai ?? {};
+
+const manifest = {
+  name: claude.name,
+  version: claude.version,
+  description: claude.description,
+  author: claude.author,
+  homepage: claude.homepage,
+  repository: claude.repository,
+  license: claude.license,
+  keywords: claude.keywords,
+  skills: "./skills/",
+  interface: {
+    displayName: claude.displayName ?? claude.name,
+    shortDescription: openai.shortDescription,
+    longDescription: openai.longDescription ?? claude.description,
+    developerName: openai.developerName ?? claude.author?.name,
+    category: openai.category,
+    capabilities: openai.capabilities ?? [],
+    websiteURL: openai.websiteURL ?? claude.homepage,
+    supportURL: claude.supportUrl,
+    privacyPolicyURL: claude.privacyPolicyUrl,
+    termsOfServiceURL: claude.termsOfServiceUrl,
+    defaultPrompt: openai.defaultPrompt,
+    brandColor: openai.brandColor,
+    logo: claude.icon,
+    composerIcon: openai.composerIcon ?? claude.icon,
+  },
+};
+
+// OpenAI's published limits, checked here so a bad value fails before upload.
+const problems = [];
+const need = (ok, message) => ok || problems.push(message);
+const { interface: ui } = manifest;
+need(/^[a-z0-9]+(-[a-z0-9]+)*$/.test(manifest.name) && manifest.name.length <= 64, "name: lowercase letters, numbers and single hyphens, at most 64 characters");
+need(/^\d+\.\d+\.\d+$/.test(manifest.version ?? ""), "version: an explicit semantic version like 1.2.3");
+need(manifest.description && manifest.description.length <= 4000, "description: required, at most 4000 characters");
+need(manifest.author?.name && manifest.author.name.length <= 120, "author.name: required, at most 120 characters");
+need(ui.displayName && ui.displayName.length <= 30, "interface.displayName: required, at most 30 characters");
+need(ui.shortDescription && ui.shortDescription.length <= 30, "metadata.openai.shortDescription: required, at most 30 characters");
+need(ui.longDescription.length <= 4000, "metadata.openai.longDescription: at most 4000 characters");
+need(ui.developerName && ui.developerName.length <= 80, "metadata.openai.developerName: required, at most 80 characters");
+need(ui.category, "metadata.openai.category: required");
+need(ui.capabilities.length <= 20 && ui.capabilities.every((c) => c.length <= 120), "metadata.openai.capabilities: at most 20, each at most 120 characters");
+for (const key of ["websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"]) {
+  need(!ui[key] || (/^https:\/\//.test(ui[key]) && ui[key].length <= 1024), `interface.${key}: an https:// URL, at most 1024 characters`);
+}
+need(!ui.defaultPrompt || (ui.defaultPrompt.length <= 3 && new Set(ui.defaultPrompt).size === ui.defaultPrompt.length && ui.defaultPrompt.every((p) => p.length <= 128)), "metadata.openai.defaultPrompt: up to 3 unique prompts, each at most 128 characters");
+need(!ui.brandColor || /^#[0-9A-Fa-f]{6}$/.test(ui.brandColor), "metadata.openai.brandColor: #RRGGBB");
+for (const key of ["logo", "composerIcon"]) {
+  need(ui[key]?.startsWith("./") && existsSync(join(root, ui[key])), `interface.${key}: a ./ path to a file in the plugin (from "icon")`);
+}
+
+if (problems.length) {
+  console.error(`Can't build .codex-plugin/plugin.json:\n- ${problems.join("\n- ")}`);
+  process.exit(1);
+}
+
+if (process.argv.includes("--dry-run")) {
+  console.log(`Codex manifest for ${manifest.name} ${manifest.version} is valid.`);
+  process.exit(0);
+}
+
+const out = join(root, ".codex-plugin/plugin.json");
+const text = `${JSON.stringify(manifest, null, 2)}\n`;
+if (process.argv.includes("--check")) {
+  if (!existsSync(out) || readFileSync(out, "utf8") !== text) {
+    console.error(".codex-plugin/plugin.json is out of date. Run: node .github/scripts/codex-manifest.mjs");
+    process.exit(1);
+  }
+  console.log(".codex-plugin/plugin.json is up to date.");
+} else {
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, text);
+  console.log(`Wrote .codex-plugin/plugin.json for ${manifest.name} ${manifest.version}.`);
+}
