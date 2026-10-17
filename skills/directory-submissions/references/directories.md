@@ -16,10 +16,11 @@ StarTap publishes this list and is itself a directory. It is listed apart from t
 | - | - | - | - | - | - | - | - |
 | StarTap | – | Product directory | Yes | Optional | Live right away | https://startap.cc/play/project | That's us: a product directory you play like a game. Tap your project up the daily and all-time boards. The Banner is optional. |
 
-## Directories (111)
+## Directories (112)
 
 | Name | DR (checked) | Type | Account | Badge | Wait | Submit URL | Notes |
 | - | - | - | - | - | - | - | - |
+| ModDB | 79 (2026-10-17) | Product directory | Yes | No | Go live after game setup | https://www.moddb.com/games/add | Shares accounts and game profiles with IndieDB. Check whether your existing IndieDB game is already listed before submitting again. Publish original game information and media; generic advertising is prohibited. Public game pages support a direct homepage link. |
 | IndieDB | 78 (2026-10-17) | Product directory | Yes | No | Go live after setup | https://www.indiedb.com/games/add/ | Independent-game showcase with Google sign-in and email confirmation. Complete game details, upload an icon and a logo (at least 320x240), and add five images before Go Live. A direct homepage link is supported. Publish factual game information and original media; generic advertising is prohibited. |
 | CSS Light | 63 (2026-10-17) | Design gallery | Yes | No | About 1 week | https://www.csslight.com/submitsite | Choose Free Submission for its website-design gallery. An email/password account is required. Premium submission and sponsored placement are optional paid plans. |
 | Tracxn | 79 (2026-10-17) | Product directory | No | No | Analyst review | https://tracxn.com/listyourstartup | Free startup information form. Requires company name, website, contact name and business email, plus agreement to its terms and privacy policy. Company description and supporting documents are optional. No phone required; an analyst may follow up, and a public listing is not guaranteed. |
