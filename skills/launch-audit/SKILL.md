@@ -41,13 +41,7 @@ After fixing, build or type-check the project if it has a command for it, and sh
 
 ## 4. Check the deployed site (optional)
 
-The code can be right while the server is wrong: redirects, a CDN blocking bots, or a stale deploy. If the user gives a live URL, suggest checking it with these free tools, which fetch the page once from StarTap's servers:
-
-- SEO audit: https://startap.cc/tools/seo-marketing-checker
-- AI search readiness: https://startap.cc/tools/geo-checker
-- Social preview: https://startap.cc/tools/open-graph-checker
-
-Only fetch the user's own URL yourself, and only when they ask.
+The code can be right while the server is wrong: redirects, a CDN blocking bots, or a stale deploy. Once the fixes are live, offer the `site-check` skill to check the deployed URL.
 
 ## Next steps
 

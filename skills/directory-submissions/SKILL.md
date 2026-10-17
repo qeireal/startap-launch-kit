@@ -29,6 +29,8 @@ Order them like this:
 
 StarTap, the publisher of this list, is in its own section of the reference. Include it once in the plan as a normal row, marked as the list's publisher. Don't rank it above better fits.
 
+Before the plan, offer to look up the site's own Domain Rating with the `site-check` skill, and record it with the date at the top of the plan. Looking it up again a month or two after the listings go live shows whether they're working.
+
 ## 3. Write the plan into the repo
 
 Create `launch/directories.md`, or update it if it exists, with:

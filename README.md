@@ -6,17 +6,18 @@
 
 </div>
 
-Three skills that help a coding agent get a website ready to launch. They work on the code in your repository, so the agent can fix problems instead of only reporting them. They're built from the free tools at [startap.cc/tools](https://startap.cc/tools).
+Four skills that help a coding agent get a website ready to launch. Most work on the code in your repository, so the agent can fix problems instead of only reporting them. They're built from the free tools at [startap.cc/tools](https://startap.cc/tools).
 
 ## Skills
 
 | Skill | What it does |
 | - | - |
 | `launch-audit` | Checks your page templates for launch SEO: title and meta description, canonical, Open Graph and X cards, JSON-LD, headings, alt text, robots.txt, sitemap, favicon, and whether AI search crawlers can read and quote the site. Reports each finding with the value it found, then fixes the gaps once you agree. |
+| `site-check` | Checks the live site with StarTap's free checkers: an SEO score, AI-search (GEO) readiness, robots.txt and sitemap, and Ahrefs Domain Rating, each with a fix and a shareable report. Local and staging sites are checked with `curl` instead. |
 | `directory-submissions` | Picks 15–25 free startup directories, launch platforms and web directories that fit your product from a curated list of more than 100. Each one has its Domain Rating where it was checked, its account and badge rules, and its review wait. It writes `launch/directories.md` with ready-to-paste listing copy and a tracking table. |
 | `launch-checklist` | Writes `launch/checklist.md`: a dated plan for two weeks before, one week before, launch day and the week after, with items your code already proves are done ticked off. |
 
-Ask in plain words, for example "audit my site before launch", "where should I submit my startup?" or "make a launch checklist for 12 November".
+Ask in plain words, for example "audit my site before launch", "what's the DR of my site?", "where should I submit my startup?" or "make a launch checklist for 12 November".
 
 ## Install
 
@@ -55,7 +56,9 @@ Update later with `codex plugin marketplace upgrade`.
 - **No scripts, hooks, MCP servers or background processes.** The plugin is Markdown instructions and reference tables only.
 - **Reads** files in your repository to learn how pages are rendered and what the product is.
 - **Writes** files only after you agree: fixes to your page templates, `launch/directories.md` and `launch/checklist.md`.
-- **Network:** the plugin sends nothing anywhere. The agent fetches your own site's URL only if you ask it to. The skills link to free tools on startap.cc that you can open yourself. Those tools fetch the URL you enter, and [StarTap's privacy policy](https://startap.cc/privacy) covers them.
+- **Network:** only `site-check` makes requests, and only when you ask it to check a site:
+  - For a public site, the agent sends the address to the StarTap API at `https://startap.cc/api/v1/tools/` (`seo`, `geo`, `sitemap` and `dr`), with `src=skill` and the plugin version so StarTap can count skill usage. StarTap fetches the page from its servers and returns the graded result. Results are cached for a few minutes (Domain Rating for a day). Each IP address and each checked site has an hourly limit. StarTap's analytics records which check ran and whether it worked, but never your IP address or the address checked. See [StarTap's privacy policy](https://startap.cc/privacy).
+  - For local, staging or private sites, or if you'd rather not share the address, the agent uses `curl` against your own site only and sends nothing to StarTap.
 - **Never** creates accounts, signs in, solves CAPTCHAs, accepts terms or submits directory forms for you. You submit each listing yourself.
 
 ## Data
